@@ -1,5 +1,4 @@
-import Swal from 'sweetalert2'
-
+import Swal from "sweetalert2";
 
 const AddCoffee = () => {
   const handleAddCoffee = (e) => {
@@ -23,23 +22,26 @@ const AddCoffee = () => {
     };
     console.log(newCoffee);
     //send data to the server
-    fetch("http://localhost:5000/coffee", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
+    fetch(
+      "https://0121-coffee-store-espresso-emporium-server-module-56-5.vercel.app/coffee",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newCoffee),
       },
-      body: JSON.stringify(newCoffee),
-    })
+    )
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
         if (data.insertedId) {
           Swal.fire({
-            title: 'success!',
-            text: 'Coffee added successfully',
-            icon: 'success',
-            confirmButtonText: 'Done'
-          })
+            title: "success!",
+            text: "Coffee added successfully",
+            icon: "success",
+            confirmButtonText: "Done",
+          });
         }
       });
   };
