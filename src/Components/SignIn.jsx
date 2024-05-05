@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { AuthContext } from "../firebase/AuthProvider";
+import axios from "axios";
 
 const SignIn = () => {
   const { signInUser } = useContext(AuthContext);
@@ -16,21 +17,35 @@ const SignIn = () => {
           email,
           lastSignInTime: result.user?.metadata?.lastSignInTime,
         };
-        //update last logged in Time
-        fetch(
-          "https://0121-coffee-store-espresso-emporium-server-module-56-5.vercel.app/user",
-          {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(user),
-          },
-        )
-          .then((res) => res.json())
+
+        //using axios
+
+        axios
+          .patch(
+            "https://0121-coffee-store-espresso-emporium-server-module-56-5.vercel.app/user",
+            user,
+          )
           .then((data) => {
-            console.log(data);
+            console.log(data.data);
           });
+
+        //using fetch
+
+        // //update last logged in Time
+        // fetch(
+        //   "https://0121-coffee-store-espresso-emporium-server-module-56-5.vercel.app/user",
+        //   {
+        //     method: "PATCH",
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //     },
+        //     body: JSON.stringify(user),
+        //   },
+        // )
+        // .then((res) => res.json())
+        // .then((data) => {
+        //   console.log(data);
+        // });
       })
       .catch((error) => {
         console.log(error);

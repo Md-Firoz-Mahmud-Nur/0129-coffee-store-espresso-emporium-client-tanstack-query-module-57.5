@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { AuthContext } from "../firebase/AuthProvider";
+import axios from "axios";
 
 const SignUp = () => {
   const { createUser } = useContext(AuthContext);
@@ -15,22 +16,35 @@ const SignUp = () => {
         //new user has been created
         const createdTime = result.user?.metadata?.creationTime;
         const user = { email, password, createdTime: createdTime };
-        fetch(
-          "https://0121-coffee-store-espresso-emporium-server-module-56-5.vercel.app/user",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(user),
-          },
-        )
-          .then((res) => res.json())
+
+        // using axios
+        axios
+          .post(
+            "https://0121-coffee-store-espresso-emporium-server-module-56-5.vercel.app/user",
+            user,
+          )
           .then((data) => {
-            if (data.insertedId) {
-              alert("user added successfully");
+            if (data.data.insertedId) {
+              console.log("user added to the database");
             }
           });
+
+        // fetch(
+        //   "https://0121-coffee-store-espresso-emporium-server-module-56-5.vercel.app/user",
+        //   {
+        //     method: "POST",
+        //     headers: {
+        //       "Content-Type": "application/json",
+        //     },
+        //     body: JSON.stringify(user),
+        //   },
+        // )
+        //   .then((res) => res.json())
+        //   .then((data) => {
+        //     if (data.insertedId) {
+        //       alert("user added successfully");
+        //     }
+        //   });
       })
       .catch((error) => {
         console.log(error);
