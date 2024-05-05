@@ -1,17 +1,27 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 const Users2 = () => {
-  const [users, setUsers] = useState([]);
+  const { isPending, isError, error, data: users } = useQuery({
+    queryKey: ["users"],
+    queryFn: async () => {
+      const res = await fetch(
+        "https://0121-coffee-store-espresso-emporium-server-module-56-5.vercel.app/user",
+      );
+      return res.json();
+    },
+  });
 
-  useEffect(() => {
-    fetch(
-      "https://0121-coffee-store-espresso-emporium-server-module-56-5.vercel.app/user",
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        setUsers(data);
-      });
-  }, []);
+  // const [users, setUsers] = useState([]);
+
+  // useEffect(() => {
+  //   fetch(
+  //     "https://0121-coffee-store-espresso-emporium-server-module-56-5.vercel.app/user",
+  //   )
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setUsers(data);
+  //     });
+  // }, []);
 
   const handleDelete = (id) => {
     //make sure user is confirm to delete
@@ -27,11 +37,20 @@ const Users2 = () => {
           console.log("delete user successfully");
 
           // remove the user from the list
-          const remainingUsers = users.filter((user) => user._id !== id);
-          setUsers(remainingUsers);
+          // const remainingUsers = users.filter((user) => user._id !== id);
+          // setUsers(remainingUsers);
         }
       });
   };
+  if (isPending) {
+    return (
+      <span className="loading loading-dots loading-lg flex h-screen items-center justify-center text-center"></span>
+    );
+  }
+
+  if (isError) {
+    return <p>{error.message}</p>
+  }
 
   return (
     <div>
